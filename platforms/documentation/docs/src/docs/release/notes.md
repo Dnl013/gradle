@@ -46,6 +46,10 @@ Example:
 > PROVIDE a screenshot or snippet illustrating the new feature, if applicable
 > LINK to the full documentation for more details
 
+<!-- To embed videos, use the macros below. You can extract the URL from YouTube by clicking the "Share" button. For Wistia, contact Gradle's Video Team -->
+@youtube(Summary,6aRM8lAYyUA?si=qeXDSX8_8hpVmH01)@
+@wistia(Summary,a5izazvgit)@
+
 ================== END TEMPLATE ==========================
 
 
@@ -53,34 +57,7 @@ Example:
 ADD RELEASE FEATURES BELOW
 vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv -->
 
-<a name="build-authoring"></a>
-### Build authoring improvements
 
-Gradle provides rich APIs for plugin authors and build engineers to develop custom build logic.
-
-#### `DependencyConstraintHandler` now has `addProvider` methods
-
-The [`DependencyConstraintHandler`](javadoc/org/gradle/api/artifacts/dsl/DependencyConstraintHandler.html) now has `addProvider` methods, similar to the 
-[`DependencyHandler`](javadoc/org/gradle/api/artifacts/dsl/DependencyHandler.html).
-
-```kotlin
-dependencies {
-    constraints {
-        // Existing API:
-        add("implementation", provider { "org.foo:bar:1.0" })
-        add("implementation", provider { "org.foo:bar:1.0" }) {
-            because("newer versions have bugs")
-        }
-        // New methods:
-        addProvider("implementation", provider { "org.foo:bar:1.0" })
-        addProvider("implementation", provider { "org.foo:bar:1.0" }) {
-            because("newer versions have bugs")
-        }
-    }
-}
-```
-
-This clarifies that adding a provider is possible, and that there is no immediately usable return value. The ability to pass a provider to `DependencyConstraintHandler.add` is unaffected.
 
 <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ADD RELEASE FEATURES ABOVE
@@ -94,10 +71,9 @@ See the User Manual section on the “[Feature Lifecycle](userguide/feature_life
 
 The following are the features that have been promoted in this Gradle release.
 
-### Service reference properties are now stable
-
-Service references are task properties meant for easier consumption of [shared build services](userguide/build_services.html#sec:service_references).
-[`ServiceReference`](/javadoc/org/gradle/api/services/ServiceReference.html) is now stable.
+<!--
+### Example promoted
+-->
 
 ## Fixed issues
 
