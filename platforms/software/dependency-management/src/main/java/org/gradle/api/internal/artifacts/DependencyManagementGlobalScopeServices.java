@@ -27,11 +27,9 @@ import org.gradle.api.internal.artifacts.ivyservice.dependencysubstitution.Modul
 import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.strategy.VersionParser;
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.DefaultDependencyMetadataFactory;
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.DefaultExcludeRuleConverter;
-import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.DefaultLocalVariantMetadataBuilder;
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.DependencyMetadataFactory;
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.ExcludeRuleConverter;
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.ExternalModuleDependencyMetadataConverter;
-import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.LocalVariantMetadataBuilder;
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.ProjectDependencyMetadataConverter;
 import org.gradle.api.internal.artifacts.transform.CacheableTransformTypeAnnotationHandler;
 import org.gradle.api.internal.artifacts.transform.InputArtifactAnnotationHandler;
@@ -80,7 +78,6 @@ class DependencyManagementGlobalScopeServices implements ServiceRegistrationProv
         registration.add(IvyContextManager.class, DefaultIvyContextManager.class);
         registration.add(ImmutableModuleIdentifierFactory.class, DefaultImmutableModuleIdentifierFactory.class);
         registration.add(ExcludeRuleConverter.class, DefaultExcludeRuleConverter.class);
-        registration.add(LocalVariantMetadataBuilder.class, DefaultLocalVariantMetadataBuilder.class);
         registration.add(PropertyAnnotationHandler.class, InjectAnnotationHandler.class, InputArtifactAnnotationHandler.class);
         registration.add(PropertyAnnotationHandler.class, InjectAnnotationHandler.class, InputArtifactDependenciesAnnotationHandler.class);
     }
@@ -145,6 +142,7 @@ class DependencyManagementGlobalScopeServices implements ServiceRegistrationProv
                 IgnoreEmptyDirectories.class,
                 NormalizeLineEndings.class
             ),
+            ImmutableSet.of(),
             instantiationScheme
         );
         return new TransformParameterScheme(instantiationScheme, inspectionScheme);
@@ -170,6 +168,7 @@ class DependencyManagementGlobalScopeServices implements ServiceRegistrationProv
                 IgnoreEmptyDirectories.class,
                 NormalizeLineEndings.class
             ),
+            ImmutableSet.of(),
             instantiationScheme
         );
         return new TransformActionScheme(instantiationScheme, inspectionScheme);

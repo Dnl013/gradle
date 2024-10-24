@@ -642,7 +642,8 @@ class ConfigurationCacheValueSourceIntegrationTest extends AbstractConfiguration
         }
     }
 
-    def 'fingerprint does not block'() {
+    def 'reentrant fingerprint'() {
+        def configurationCache = newConfigurationCacheFixture()
         given:
         buildFile """
             abstract class CustomValueSource implements ValueSource<String, Parameters> {
@@ -666,16 +667,7 @@ class ConfigurationCacheValueSourceIntegrationTest extends AbstractConfiguration
                 message = providers.of(CustomValueSource) {
                     parameters {
                         string = provider {
-                            String prop = null
-                             def t = Thread.start {
-                                prop = System.getProperty('MY_SYSTEM_PROPERTY', '42')
-                            }
-                            t.join(5_000)
-                            if (t.isAlive()) {
-                                println(t.getStackTrace().join("\\n\\t"))
-                                throw new RuntimeException("deadlock")
-                            }
-                            prop
+                            System.getProperty('MY_SYSTEM_PROPERTY', '42')
                         }
                     }
                 }.get() // explicitly calling get to trigger reentrant fingerprint behavior
@@ -688,17 +680,20 @@ class ConfigurationCacheValueSourceIntegrationTest extends AbstractConfiguration
 
         then:
         outputContains '42'
+        configurationCache.assertStateStored()
 
         when:
         configurationCacheRun 'build'
 
         then:
         outputContains '42'
+        configurationCache.assertStateLoaded()
 
         when:
-        configurationCacheRun 'build', "-DMY_SYSTEM_PROPERTY=2001"
+        configurationCacheRun 'build', '-DMY_SYSTEM_PROPERTY=2001'
 
         then:
         outputContains '2001'
+        configurationCache.assertStateStored()
     }
 }
